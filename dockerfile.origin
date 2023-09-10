@@ -8,7 +8,7 @@ WORKDIR /app
 COPY requirements.txt .
 
 # Atualize o pip e instale as dependências do Python
-RUN pip install --upgrade pip && pip install flask tensorflow numpy keras Pillow
+RUN pip install --upgrade pip && pip install flask tensorflow numpy keras Pillow waitress
 
 # Copie seu código Python para o diretório de trabalho
 COPY . .

@@ -29,4 +29,5 @@ def predict():
         return Response(status=400)
 
 if __name__ == '__main__':
-    app.run(port=3000, debug=True)
+    from waitress import serve
+    serve(app,port=8080, host = "0.0.0.0")
