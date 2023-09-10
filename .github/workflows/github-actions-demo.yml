@@ -1,31 +1,41 @@
-name: Check requirements.txt
+name: Check Dependencies
 
 on:
   push:
     branches:
-      - main
+      - main  # Altere para a branch principal do seu projeto
 
 jobs:
-  check-requirements:
+  check-dependencies:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-      - name: Install Python
+      - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.9.13
+          python-version: 3.9.13  # Especifique a versão do Python que você está usando
 
-      - name: Install Node.js
-        uses: actions/setup-node@v2
-        
-      - name: Install pipdeptree
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Check dependencies
         run: |
-
-          pip install pipdeptree
+          installed_packages=$(pip freeze)
+          required_packages=$(cat requirements.txt)
+          missing_packages=""
           
-      - name: Check requirements.txt
-        run: |
+          for package in $required_packages; do
+            if ! echo "$installed_packages" | grep -q "^$package=="; then
+              missing_packages="$missing_packages $package"
+            fi
+          done
 
-          pipdeptree -r requirements.txt
+          if [ -n "$missing_packages" ]; then
+            echo "Missing dependencies: $missing_packages"
+            exit 1
+          else
+            echo "All dependencies are satisfied."
+          fi
