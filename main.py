@@ -1,4 +1,7 @@
-from flask import Flask, request, Response
+from fastapi import FastAPI
+from fastapi.responses import RedirectResponse
+import uvicorn
+
 from PIL import Image
 
 import numpy
@@ -6,8 +9,11 @@ import tensorflow as tf
 
 from keras.applications.mobilenet_v3 import preprocess_input
 
-app = Flask(__name__)
+app = FastAPI(title="areader AI api")
 model = tf.keras.models.load_model("model/model4")
+
+@app.pos
+
 
 @app.route('/', methods=['POST'])
 def predict():
@@ -24,10 +30,9 @@ def predict():
     print(classification)
 
     if classification < 0.5:
-        return Response(status=200)
+        return RedirectResponse(status_code=200)
     else:
-        return Response(status=400)
+        return RedirectResponse(status_code=400)
 
 if __name__ == '__main__':
-    from waitress import serve
-    serve(app,port=8080, host = "0.0.0.0")
+    uvicorn.run('main:app', host='0.0.0.0', port=8000)
