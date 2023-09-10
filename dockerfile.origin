@@ -1,0 +1,17 @@
+# Use a imagem base do Python 3.9
+FROM python:3.9.13
+
+# Define o diretório de trabalho dentro do contêiner
+WORKDIR /app
+
+# Copie o arquivo de requisitos para o diretório de trabalho
+COPY requirements.txt .
+
+# Atualize o pip e instale as dependências do Python
+RUN pip install --upgrade pip && pip install flask tensorflow numpy keras Pillow
+
+# Copie seu código Python para o diretório de trabalho
+COPY . .
+
+# Comando para rodar seu código Python
+CMD ["python", "main.py"]
