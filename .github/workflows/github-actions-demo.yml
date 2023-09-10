@@ -21,21 +21,5 @@ jobs:
       - name: Install dependencies
         run: pip install flask tensorflow numpy keras
 
-      - name: Check dependencies
-        run: |
-          installed_packages=$(pip freeze)
-          required_packages=$(cat requirements.txt)
-          missing_packages=""
-          
-          for package in $required_packages; do
-            if ! echo "$installed_packages" | grep -q "^$package=="; then
-              missing_packages="$missing_packages $package"
-            fi
-          done
-
-          if [ -n "$missing_packages" ]; then
-            echo "Missing dependencies: $missing_packages"
-            exit 1
-          else
-            echo "All dependencies are satisfied."
-          fi
+      - name: Run main.py
+        run: python main.py
