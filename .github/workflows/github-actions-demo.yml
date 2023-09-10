@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Install Python
         uses: actions/setup-python@v2
@@ -19,7 +19,13 @@ jobs:
 
       - name: Install Node.js
         uses: actions/setup-node@v2
+        
+      - name: Install pipdeptree
+        run: |
 
+          pip install pipdeptree
+          
       - name: Check requirements.txt
         run: |
+
           pipdeptree -r requirements.txt
