@@ -1,6 +1,6 @@
 from fastapi import FastAPI, UploadFile
 from fastapi.responses import JSONResponse
-import uvicorn
+#import uvicorn
 from io import BytesIO
 
 from PIL import Image
@@ -35,5 +35,5 @@ async def predict(file: UploadFile):
     else:
         return JSONResponse(content={"message": "invalid","classification": str(classification)}, status_code=400)
 
-if __name__ == '__main__':
-    uvicorn.run('main:app', host='0.0.0.0', port=8000)
+#if __name__ == '__main__':
+ #   uvicorn.run('main:app', host='0.0.0.0', port=8000)
