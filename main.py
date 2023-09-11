@@ -1,6 +1,7 @@
-from fastapi import FastAPI
-from fastapi.responses import RedirectResponse
-import uvicorn
+from fastapi import FastAPI, UploadFile
+from fastapi.responses import JSONResponse
+#import uvicorn
+from io import BytesIO
 
 from PIL import Image
 
@@ -12,15 +13,15 @@ from keras.applications.mobilenet_v3 import preprocess_input
 app = FastAPI(title="areader AI api")
 model = tf.keras.models.load_model("model/model4")
 
-@app.pos
-
-
-@app.route('/', methods=['POST'])
-def predict():
-    imagefile = request.files['imagefile']
+@app.post('/')
+async def predict(file: UploadFile):
+    if not file.filename.lower().endswith(('.jpg', '.jpeg')):
+        return JSONResponse(content={"message": "Apenas arquivos de imagem .jpg são permitidos"}, status_code=406)
+    
+    imagefile = await file.read()
 
     image = numpy.empty((1, 224, 224, 3))
-    image_pil = Image.open(imagefile)
+    image_pil = Image.open(BytesIO(imagefile))
     image_pil = image_pil.resize([224, 224])
     image[0] = image_pil
 
@@ -30,9 +31,9 @@ def predict():
     print(classification)
 
     if classification < 0.5:
-        return RedirectResponse(status_code=200)
+        return JSONResponse(content={"message": "valid","classification": str(classification)}, status_code=200)
     else:
-        return RedirectResponse(status_code=400)
+        return JSONResponse(content={"message": "invalid","classification": str(classification)}, status_code=400)
 
-if __name__ == '__main__':
-    uvicorn.run('main:app', host='0.0.0.0', port=8000)
+#if __name__ == '__main__':
+    #uvicorn.run('main:app', host='0.0.0.0', port=8000)
