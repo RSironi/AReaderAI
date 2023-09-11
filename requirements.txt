@@ -21,7 +21,7 @@ h11
 h5py
 idna
 importlib-metadata
-itsdangerou
+itsdangerous
 Jinja2
 keras
 libclang
