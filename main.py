@@ -42,6 +42,6 @@ async def predict(file: UploadFile):
     else:
         return JSONResponse(content={"message": "invalid","classification": str(classification)}, status_code=400)
 
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    run(app, host="0.0.0.0", port=port)
+#if __name__ == "__main__":
+ #   port = int(os.environ.get("PORT", 5000))
+  #  run(app, host="0.0.0.0", port=port)
