@@ -1,7 +1,9 @@
 from fastapi import FastAPI, UploadFile
 from fastapi.responses import JSONResponse
-#import uvicorn
+
+from uvicorn import run
 from io import BytesIO
+import os
 
 from PIL import Image
 
@@ -13,7 +15,12 @@ from keras.applications.mobilenet_v3 import preprocess_input
 app = FastAPI(title="areader AI api")
 model = tf.keras.models.load_model("model/model4")
 
-@app.post('/')
+
+@app.get("/")
+async def root():
+    return {"message": "Welcome to AReader_AI API"}
+
+@app.post("/")
 async def predict(file: UploadFile):
     if not file.filename.lower().endswith(('.jpg', '.jpeg')):
         return JSONResponse(content={"message": "Apenas arquivos de imagem .jpg são permitidos"}, status_code=406)
@@ -35,5 +42,6 @@ async def predict(file: UploadFile):
     else:
         return JSONResponse(content={"message": "invalid","classification": str(classification)}, status_code=400)
 
-#if __name__ == '__main__':
- #   uvicorn.run('main:app', host='0.0.0.0', port=8000)
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))
+    run(app, host="0.0.0.0", port=port)
