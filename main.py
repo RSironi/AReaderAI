@@ -3,7 +3,6 @@ from fastapi.responses import JSONResponse
 
 from uvicorn import run
 from io import BytesIO
-import os
 
 from PIL import Image
 
@@ -44,4 +43,4 @@ async def predict(file: UploadFile):
 
 #if __name__ == "__main__":
  #   port = int(os.environ.get("PORT", 5000))
-  #  run(app, host="0.0.0.0", port=port)
+   # run(app, host="0.0.0.0", port=port)
