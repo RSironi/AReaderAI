@@ -11,8 +11,10 @@ import tensorflow as tf
 
 from keras.applications.mobilenet_v3 import preprocess_input
 
-app = FastAPI(title="areader AI api")
-model = tf.keras.models.load_model("model/model4")
+
+app = FastAPI()
+
+model = tf.keras.models.load_model("./model")
 
 
 @app.get("/")

@@ -1,5 +1,5 @@
 # Use a imagem base do Python 3.9
-FROM python:3.9.13
+FROM tiangolo/uvicorn-gunicorn-fastapi:python3.9
 
 # Define o diretório de trabalho dentro do contêiner
 WORKDIR /code
@@ -11,6 +11,5 @@ COPY ./requirements.txt /code/requirements.txt
 RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 #install FastAPI tensorflow numpy keras Pillow uvicorn python-multipart
 
+COPY ./model/ /code/model/
 COPY ./main.py /code/
-
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80"]
