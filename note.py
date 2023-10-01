@@ -1,5 +1,6 @@
 import textwrap
 from PIL import Image, ImageFont, ImageDraw, ImageOps
+from io import BytesIO
 
 #Limitado a 240 caracteres
 def CalculoTamanhoFonte(lenTexto: int):
@@ -51,4 +52,8 @@ def gerarImagem(texto:str):
         valorY+=multiplicadorValorY
 
     imagemReturn = ImageOps.expand(imagemReturn,border=1,fill="black")
-    return imagemReturn
+
+    image_bytes = BytesIO()
+    imagemReturn.save(image_bytes, format='JPEG')
+    image_bytes = image_bytes.getvalue()
+    return image_bytes

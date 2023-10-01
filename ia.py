@@ -19,6 +19,5 @@ def convertToPredict(byteImage: BytesIO):
     image = preprocess_input(image)
     classification = model.predict(image)
     classification = classification[0][0]
-    print(classification)
 
     return classification
