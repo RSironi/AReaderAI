@@ -1,59 +1,54 @@
 import textwrap
-from PIL import Image, ImageFont, ImageDraw
+from PIL import Image, ImageFont, ImageDraw, ImageOps
+
 #Limitado a 240 caracteres
-textoUmCaractere = "A" #01
-textoMuitoCurto = "Exercício de matemática pra segunda" #35
-textoCurto = "Aqui o autor lembra-se de sua antiga espada e benevolente fosse alga" #70
-textoMedio = "Dada a nota de Velma, nada pode-se fazer pois a mesma está abaixo da média nacional de notas estabelecida pelo governo A " #120
-textoLongo = """Se o caminho para o arquivo de fonte estiver correto, verifique se você está usando a função corretamente. A função recebe dois argumentos: o caminho para o arquivo de fonte e o tamanho da fonte. Você pode verificar se está deveras estradaa"""#240
+def CalculoTamanhoFonte(lenTexto: int):
+   tamanho_maximo = 100 # Define o tamanho máximo da Fonte
+   fator = 0.35 # Alterar de acordo com o tamanho mínimo da fonte para X caracteres
+   return tamanho_maximo/(lenTexto**fator) # Ex: max_Caracteres = 240 -> tamanho_max = 100; tamanho_min = 15; fator = 0.35; -> Com 240c teremos o tamanho da fonte = 14,68676 e com 1c = 100
+
+def CalculoQuebraTexto(lenTexto:int):
+   quebra_min = 1
+   if lenTexto <= 15:
+    return quebra_min*lenTexto   
+   elif lenTexto<= 35:
+    return quebra_min*(lenTexto**0.9)
+   elif lenTexto<= 70:
+    return quebra_min*(lenTexto**0.79)
+   elif lenTexto<= 120:
+    return quebra_min*(lenTexto**0.75)
+   else:
+    return quebra_min*(lenTexto**0.68)
+
+def quebrarTexto(texto:str):
+    tamanho_quebra = round(CalculoQuebraTexto(len(texto))) 
+    return textwrap.wrap(text=texto,width=tamanho_quebra,break_long_words=True)
+
+def CalculoDistanciaEntreLinhas(lenTexto:int):
+    if lenTexto <= 50:
+        return 30
+    elif lenTexto <= 100:
+        return 25
+    else:
+        return 20
 
 def gerarImagem(texto:str):
-    tamanho_fonte_padrao = 100
-    tamanho_fonte = tamanho_fonte_padrao/ (len(texto)**0.35)
-    fonte = ImageFont.truetype("./font/marker-felt.ttf",tamanho_fonte)
-    #fonte = ImageFont.truetype("./font/comic-sans-ms-4.ttf",12)
-    imagemReturn = Image.new("RGB", (270,142), color=(255,255,153))
+    tamanhoTexto = len(texto)
 
-    tamanho_quebra_padrão = 1
+    fonte = ImageFont.truetype("./font/marker-felt.ttf",CalculoTamanhoFonte(tamanhoTexto))
 
-    if len(texto) <= 35:
-      tamanho_quebra = tamanho_quebra_padrão*((len(texto)**0.8))
-    else:
-      tamanho_quebra = tamanho_quebra_padrão*((len(texto)**0.68))
-    
-    texto_quebrado = textwrap.wrap(text=texto,width=tamanho_quebra) #formula para tamanho quebra
-                                                        #120C = 30
-                                                        #240C = 40
-                                                        # 70C = 28
-    
+    imagemReturn = Image.new("RGB", (270,142), color=(255,255,153)) 
+
     caneta = ImageDraw.Draw(imagemReturn)
- 
 
-    print(f"tamanho da fonte: {tamanho_fonte} \n e tamanho texto: {tamanho_quebra}")
+    texto_quebrado = quebrarTexto(texto)
 
-    valorY=3 #formula para valor
-    if len(texto) <= 50:
-        multiplyValorY = 30
-    else:
-       multiplyValorY = 20
-
+    valorY=3
+    multiplicadorValorY = CalculoDistanciaEntreLinhas(tamanhoTexto)
 
     for linha in texto_quebrado:
-        caneta.text((10,valorY),text=linha,fill="white",font=fonte,stroke_width=1,stroke_fill="black")
-        valorY+=multiplyValorY
+        caneta.text((10,valorY),text=linha,fill="black",font=fonte,stroke_width=0,stroke_fill="black")
+        valorY+=multiplicadorValorY
 
+    imagemReturn = ImageOps.expand(imagemReturn,border=1,fill="black")
     return imagemReturn
-
-gerarImagem(textoUmCaractere).show()
-gerarImagem(textoMuitoCurto).show()
-gerarImagem(textoCurto).show()
-gerarImagem(textoMedio).show()
-gerarImagem(textoLongo).show()
-
-
-
-""" for i in range(1,100):
-    print(f"valor i {i} //" + "fator:"+ str(i/100))
-    print( "70c - " + str(1*(70**(i/100))))
-    print( "120c - " + str(1*(120**(i/100))))
-    print( "240c - " + str(1*(240**(i/100)))) """
