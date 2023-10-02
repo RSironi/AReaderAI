@@ -15,17 +15,18 @@ async def root():
 @app.post("/")
 async def predict(file: UploadFile, text: str = Form(...,max_length=240,media_type="text/plain")):
     if not file.content_type == "image/jpeg":
-        return jsonResponseController.returnResponse(-1)
+        return jsonResponseController.returnNotAcceptable()
     
     imagefile = await file.read()
-    print(text)
     classification = ia.convertToPredict(imagefile)
 
     if classification <0.5:
-        urlImagemAncora = cloudinaryController.uploadImage(imagefile)
-        urlImagemNota = cloudinaryController.uploadImage(note.gerarImagem(text))
-        print(f" \nclassificação= {classification}\n urlImagemAncora= {urlImagemAncora}\n urlImagemNota= {urlImagemNota}")
-    return jsonResponseController.returnResponse(classification)
+        urlImage = cloudinaryController.uploadImage(imagefile)
+        urlNote = cloudinaryController.uploadImage(note.gerarImagem(text))
+        print(f" \nclassificação= {classification}\n urlImagemAncora= {urlImage}\n urlImagemNota= {urlNote}")
+        return jsonResponseController.ok(classification,urlImage,urlNote)
+    else:
+        return jsonResponseController.badRequest(classification)
 
 import uvicorn
 if __name__ == '__main__':
