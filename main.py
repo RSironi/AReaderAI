@@ -46,6 +46,6 @@ async def predict(file: UploadFile, text: str = Form(...,max_length=240,media_ty
     else:
         return jsonResponseController.badRequest(classification)
 
-import uvicorn
+""" import uvicorn
 if __name__ == '__main__':
-    uvicorn.run("main:app",host='0.0.0.0', port=8080, reload=True)
+    uvicorn.run("main:app",host='0.0.0.0', port=8080, reload=True) """

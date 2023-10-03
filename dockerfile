@@ -12,4 +12,9 @@ RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 #install FastAPI tensorflow numpy keras Pillow uvicorn python-multipart
 
 COPY ./model/ /code/model/
+COPY ./cloudinaryController.py /code/
+COPY ./ia.py /code/
+COPY ./jsonResponseController.py /code/
+COPY ./note.py /code/
+COPY ./font/ /code/font/
 COPY ./main.py /code/
