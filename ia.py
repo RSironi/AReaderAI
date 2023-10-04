@@ -9,11 +9,11 @@ from keras.applications.mobilenet_v3 import preprocess_input
 
 model = tf.keras.models.load_model("./model")
 
-def convertToPredict(byteImage: BytesIO):
+def convertToPredict(byteimage: BytesIO):
 
     image = numpy.empty((1,224,224,3))
 
-    image_pil = Image.open(BytesIO(byteImage))
+    image_pil = Image.open(BytesIO(byteimage))
     image_pil= image_pil.resize([224,224])
     image[0] = image_pil
     image = preprocess_input(image)
