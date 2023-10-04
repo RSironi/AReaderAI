@@ -48,7 +48,7 @@ def generateImage(text:str):
     valueYMultiply = calculateDistanceBetweenLines(text_size)
 
     for line in text_broken:
-        pen.text((10,Y),text=line,fill="black",font=font,stroke_width=0,stroke_fill="black")
+        pen.text((10,valueY),text=line,fill="black",font=font,stroke_width=0,stroke_fill="black")
         valueY+=valueYMultiply
 
     bkImage = ImageOps.expand(bkImage,border=1,fill="black")
